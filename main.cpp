@@ -9,6 +9,8 @@ using namespace std;
 
 const int MAX_STATES = 50;
 
+#define POPULATION
+
 template<typename T>
 void Swap(T& x, T& y)
 {
@@ -41,12 +43,12 @@ void ReheapDown(T elements[], int root, int bottom)
             maxChild = leftChild;
         else
         {
-            if (elements[leftChild] <= elements[rightChild]) //dereference for extra
+            if (*elements[leftChild] <= *elements[rightChild]) //dereference for extra
                 maxChild = rightChild;
             else
                 maxChild = leftChild;
         }
-        if (elements[root] < elements[maxChild])
+        if (*elements[root] < *elements[maxChild])
         {
             Swap(elements[root], elements[maxChild]);
             //                      2        8
@@ -67,7 +69,7 @@ void HeapSort(T values[], int numValues)
     {
         ReheapDown(values, index, numValues-1);
     }
-    cout << "Now a heap!!\n";
+    //cout << "Now a heap!!\n";
     cin.get();
     // Sort the array.
     step = 0;
@@ -86,7 +88,7 @@ void BubbleUp(T values[], int startIndex, int endIndex, bool& sorted)
 {
     sorted = true;
     for (int index = endIndex; index > startIndex; index--)
-        if (values[index] > values[index-1])
+        if (*values[index] > *values[index-1])
         {
             Swap(values[index], values[index-1]);
             sorted = false;
@@ -123,7 +125,7 @@ struct StateInfo
     int zip;
 };
 
-
+#ifndef POPULATION
 bool operator>(const StateInfo &s1, const StateInfo &s2){
     return strcmp(s1.name,s2.name) > 0;
 }
@@ -139,6 +141,26 @@ bool operator>=(const StateInfo &s1, const StateInfo &s2){
 bool operator<=(const StateInfo &s1, const StateInfo &s2){
     return strcmp(s1.name,s2.name) <= 0;
 }
+#else
+
+bool operator>(const StateInfo &s1, const StateInfo &s2){
+
+    return s1.population > s2.population;
+}
+
+bool operator<(const StateInfo &s1, const StateInfo &s2){
+    return s1.population < s2.population;
+}
+
+bool operator>=(const StateInfo &s1, const StateInfo &s2){
+
+    return s1.population >= s2.population;
+}
+
+bool operator<=(const StateInfo &s1, const StateInfo &s2){
+    return s1.population <= s2.population;
+}
+#endif
 
 
 void test(StateInfo *a){
@@ -177,10 +199,10 @@ int main()
 //    for(auto i : pStates)
 //        cout << i->name << endl;
 
-    cout << "HeapSort: " << endl;
+   // cout << "HeapSort: " << endl;
 
-     //BubbleSort(pStates,i);
-      HeapSort(states,i);
+//     //BubbleSort(pStates,i);
+      HeapSort(pStates,i);
 
     cout << "State: " << setw(10) << " | ";
     cout << setw(12) << "Population:" << " | ";
@@ -192,21 +214,51 @@ int main()
     cout << setw(12) << "Zip:" << endl;
     cout << "---------------------------------------------------" << endl;
 
-    for(auto i : states){
-        cout << i.name << " | ";
-        cout << setw(12) << i.population << " | ";
-        cout << setw(15) << i.area << " | ";
-        cout << setw(12) << i.year << " | ";
-        cout << setw(12) << i.order << " | ";
-        cout << setw(12) << i.capital << " | ";
-        cout << setw(12) << i.abbrev << " | ";
-        cout << setw(12) << i.zip << " | " << endl;
+    for(auto i : pStates){
+        cout << i->name << " | ";
+        cout << setw(12) << i->population << " | ";
+        cout << setw(15) << i->area << " | ";
+        cout << setw(12) << i->year << " | ";
+        cout << setw(12) << i->order << " | ";
+        cout << setw(12) << i->capital << " | ";
+        cout << setw(12) << i->abbrev << " | ";
+        cout << setw(12) << i->zip << " | " << endl;
+    }
+
+//    cout << "---------------------------------------------------" << endl;
+
+    cout << "BubbleSort: " << endl;
+    cin.get();
+    BubbleSort(pStates,i);
+
+    cout << "State: " << setw(10) << " | ";
+    cout << setw(12) << "Population:" << " | ";
+    cout << setw(15) << "Area Code:" << " | ";
+    cout << setw(12) << "Year:" << " | ";
+    cout << setw(12) << "Order: " << " | ";
+    cout << setw(14) << "Capital:" << " | ";
+    cout << setw(12) << "Abbrev.:" << " | ";
+    cout << setw(12) << "Zip:" << endl;
+    cout << "---------------------------------------------------" << endl;
+
+    for(auto i : pStates){
+        cout << i->name << " | ";
+        cout << setw(12) << i->population << " | ";
+        cout << setw(15) << i->area << " | ";
+        cout << setw(12) << i->year << " | ";
+        cout << setw(12) << i->order << " | ";
+        cout << setw(12) << i->capital << " | ";
+        cout << setw(12) << i->abbrev << " | ";
+        cout << setw(12) << i->zip << " | " << endl;
     }
 
 
 
     return 0;
 }
+
+
+
 
 
 
